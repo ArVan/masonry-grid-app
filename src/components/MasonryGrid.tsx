@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { Photo, PhotoWithIndex } from "@/types/photos";
 
@@ -51,6 +52,8 @@ const GridItem = styled.div.attrs<{
   margin-bottom: 16px;
   background-color: ${({ $avgColor }) => $avgColor || "#ddd"};
   position: relative;
+  cursor: pointer;
+  border-radius: 4px;
   background-image: linear-gradient(
     to right,
     rgba(255, 255, 255, 0.1) 0%,
@@ -59,6 +62,9 @@ const GridItem = styled.div.attrs<{
   );
   background-size: 200px 100%;
   animation: ${shimmer} 1.5s infinite linear;
+  &:hover {
+    transform: scale(1.05);
+  }
 
   &:before {
     content: "";
@@ -70,16 +76,18 @@ const GridItem = styled.div.attrs<{
 // 🔹 New Component to Handle Image Loading State
 const MasonryItem = ({ photo, index }: { photo: Photo; index: number }) => {
   const [loaded, setLoaded] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <GridItem
       $aspectRatio={photo.width / photo.height}
       $avgColor={photo.avg_color}
       $dataIndex={index}
+      onClick={() => navigate(`/photo/${photo.id}`)}
     >
       <Image
         src={photo.src.medium}
-        alt={photo.photographer}
+        alt={photo.alt}
         onLoad={() => setLoaded(true)}
         $isLoaded={loaded}
       />
@@ -96,4 +104,5 @@ const Image = styled.img<{ $isLoaded: boolean }>`
   object-fit: cover;
   transition: opacity 0.5s ease-in-out;
   opacity: ${({ $isLoaded }) => ($isLoaded ? 1 : 0)};
+  border-radius: 4px;
 `;

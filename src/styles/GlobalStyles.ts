@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, keyframes } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
   :root {
@@ -26,4 +26,9 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 3.2em;
     line-height: 1.1;
   }
+`;
+
+export const shimmer = keyframes`
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
 `;
