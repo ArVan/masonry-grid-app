@@ -20,6 +20,10 @@ export interface Photo {
     tiny: string;
   };
 }
+export interface PhotoWithIndex extends Photo {
+  index: number;
+}
+
 export interface Params {
   [key: string]: string | number | undefined;
 }
