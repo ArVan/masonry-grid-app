@@ -52,6 +52,7 @@ const PhotoDetails = () => {
           alt={photo.alt}
           onLoad={() => setLoaded(true)}
           $isLoaded={loaded}
+          loading="lazy"
         />
       </PhotoWrapper>
 

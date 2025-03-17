@@ -90,6 +90,7 @@ const MasonryItem = ({ photo, index }: { photo: Photo; index: number }) => {
         alt={photo.alt}
         onLoad={() => setLoaded(true)}
         $isLoaded={loaded}
+        loading="lazy"
       />
     </GridItem>
   );
