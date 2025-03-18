@@ -18,7 +18,7 @@ const PhotoDetails = () => {
     <DetailsContainer>
       <BackButton onClick={() => navigate(-1)}>← Back</BackButton>
 
-      <PhotoWrapper $aspectRatio={photo.width / photo.height} $avgColor={photo.avg_color}>
+      <PhotoWrapper $aspectRatio={photo.height / photo.width} $avgColor={photo.avg_color}>
         <LargePhoto
           src={photo.src.original}
           alt={photo.alt}
