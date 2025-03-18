@@ -53,7 +53,7 @@ export const usePhotoStore = create<PhotoStore>((set, get) => ({
       const newIds = data.photos.map((photo) => photo.id);
 
       set({
-        photos: [...photos, ...newIds], // Append new photos
+        photos: [...new Set([...photos, ...newIds])], // Append new photo ids ensuring it is unique
         photosById: {
           ...photosById,
           ...data.photos.reduce(

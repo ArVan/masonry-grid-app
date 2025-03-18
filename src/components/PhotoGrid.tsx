@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import MasonryGrid from "./MasonryGrid";
 import { usePhotoStore } from "@/store/usePhotoStore";
 
@@ -6,7 +6,7 @@ let ignoreOnDoubleMount = false;
 
 const PhotoGrid = () => {
   const { photos, photosById, loading, error, hasNext, fetchPhotos } = usePhotoStore();
-  const observerRef = useRef<HTMLDivElement | null>(null);
+  const [allVisible, setAllVisible] = useState(false);
 
   const onLoadMorePhotos = (ignore?: boolean) => {
     if (!ignore) {
@@ -22,33 +22,21 @@ const PhotoGrid = () => {
     };
   }, []);
 
-  // Infinite Scroll Effect
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        console.log(entries);
-        if (entries[0].isIntersecting && !loading) {
-          fetchPhotos(); // Load more when last item is visible
-        }
-      },
-      { threshold: 1.0, rootMargin: "200px" },
-    );
-
-    if (observerRef.current) observer.observe(observerRef.current);
-    return () => observer.disconnect();
-  }, [loading]);
+    if (allVisible && hasNext) {
+      fetchPhotos().then(() => {
+        setAllVisible(false);
+      });
+    }
+    return () => {};
+  }, [allVisible, hasNext]);
 
   if (error) return <p>Error: {error}</p>;
 
   return (
     <>
-      <MasonryGrid photoIds={photos} photos={photosById} />
-      {hasNext && (
-        <>
-          <div ref={observerRef} style={{ height: "10px" }} />
-          {loading && <p>Loading more images...</p>}
-        </>
-      )}
+      <MasonryGrid photoIds={photos} photos={photosById} onEndReached={() => setAllVisible(true)} />
+      {hasNext && allVisible && <>{loading && <p>Loading more images...</p>}</>}
     </>
   );
 };

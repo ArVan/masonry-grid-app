@@ -21,19 +21,23 @@ export const GridItem = styled.div.attrs<{
   $aspectRatio: number;
   $avgColor: string | null;
   $dataIndex: number;
+  $isVisible: boolean;
 }>((props) => ({
   className: "photo-item",
   "data-index": props.$dataIndex,
   $aspectRatio: props.$aspectRatio,
   $avgColor: props.$avgColor,
+  $isVisible: props.$isVisible,
 }))`
   grid-row-end: span ${({ $aspectRatio }) => Math.floor($aspectRatio * 10)}; /* Controls height */
   overflow: hidden;
-
   display: inline-block;
   width: 100%;
+  height: ${({ $isVisible }) =>
+    $isVisible ? "auto" : "1px"}; /* Preserve space but minimize rendering cost */
   margin-bottom: 16px;
-  background-color: ${({ $avgColor }) => $avgColor || "#ddd"};
+  background-color: ${({ $isVisible, $avgColor }) =>
+    $isVisible ? $avgColor || "#ddd" : "transparent"};
   position: relative;
   cursor: pointer;
   border-radius: 4px;
