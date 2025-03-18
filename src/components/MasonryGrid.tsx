@@ -85,9 +85,7 @@ const MasonryItem = ({ photo, index }: { photo: Photo; index: number }) => {
 
   return (
     <GridItem
-      $aspectRatio={
-        photo.width >= photo.height ? photo.width / photo.height : photo.height / photo.width
-      }
+      $aspectRatio={photo.height / photo.width}
       $avgColor={photo.avg_color}
       $dataIndex={index}
       onClick={() => navigate(`/photo/${photo.id}`, { preventScrollReset: true })}
