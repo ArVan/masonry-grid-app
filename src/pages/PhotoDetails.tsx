@@ -1,42 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Photo } from "@/types/photos";
 import { shimmer } from "@/styles/GlobalStyles";
-
-const API_KEY = import.meta.env.VITE_PEXELS_API_KEY;
-const API_URL = "https://api.pexels.com/v1/photos/";
+import { usePhoto } from "@/hooks/usePhoto";
 
 const PhotoDetails = () => {
   const { id } = useParams(); // Get photo ID from URL
   const navigate = useNavigate();
-  const [photo, setPhoto] = useState<Photo | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { photo, loading, error } = usePhoto(id);
   const [loaded, setLoaded] = useState<boolean>(false);
-
-  // Fetch photo details from Pexels API
-  useEffect(() => {
-    const fetchPhotoDetails = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`${API_URL}${id}`, {
-          headers: { Authorization: API_KEY },
-        });
-
-        if (!response.ok) throw new Error("Failed to fetch photo details");
-
-        const data = await response.json();
-        setPhoto(data);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPhotoDetails();
-  }, [id]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
