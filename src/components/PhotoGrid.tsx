@@ -5,7 +5,7 @@ import { usePhotoStore } from "@/store/usePhotoStore";
 let ignoreOnDoubleMount = false;
 
 const PhotoGrid = () => {
-  const { photos, loading, error, hasNext, fetchPhotos } = usePhotoStore();
+  const { photos, photosById, loading, error, hasNext, fetchPhotos } = usePhotoStore();
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const onLoadMorePhotos = (ignore?: boolean) => {
@@ -42,7 +42,7 @@ const PhotoGrid = () => {
 
   return (
     <>
-      <MasonryGrid photos={photos} />
+      <MasonryGrid photoIds={photos} photos={photosById} />
       {hasNext && (
         <>
           <div ref={observerRef} style={{ height: "10px" }} />

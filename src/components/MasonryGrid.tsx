@@ -4,14 +4,15 @@ import styled, { keyframes } from "styled-components";
 import { Photo, PhotoWithIndex } from "@/types/photos";
 
 interface MasonryGridProps {
-  photos: PhotoWithIndex[];
+  photos: { [key: string]: PhotoWithIndex };
+  photoIds: number[];
 }
 
-const MasonryGrid = ({ photos }: MasonryGridProps) => {
+const MasonryGrid = ({ photos, photoIds }: MasonryGridProps) => {
   return (
     <GridContainer>
-      {photos.map((photo) => (
-        <MasonryItem key={photo.id} photo={photo} index={photo.index} />
+      {photoIds.map((photoId) => (
+        <MasonryItem key={photoId} photo={photos[photoId]} index={photos[photoId].index} />
       ))}
     </GridContainer>
   );
