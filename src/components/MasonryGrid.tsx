@@ -21,15 +21,18 @@ const MasonryGrid = ({ photos, photoIds }: MasonryGridProps) => {
 export default MasonryGrid;
 
 const GridContainer = styled.div`
-  column-count: auto;
-  column-width: 250px;
-  column-gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive column layout */
+  grid-auto-rows: 10px; /* Defines row height unit */
+  gap: 16px;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  grid-auto-flow: dense; /* Fills in gaps efficiently */
 
   @media (max-width: 768px) {
-    column-width: 150px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-auto-rows: 8px;
   }
 `;
 
@@ -48,6 +51,9 @@ const GridItem = styled.div.attrs<{
   $aspectRatio: props.$aspectRatio,
   $avgColor: props.$avgColor,
 }))`
+  grid-row-end: span ${({ $aspectRatio }) => Math.floor($aspectRatio * 10)}; /* Controls height */
+  overflow: hidden;
+
   display: inline-block;
   width: 100%;
   margin-bottom: 16px;
@@ -63,28 +69,28 @@ const GridItem = styled.div.attrs<{
   );
   background-size: 200px 100%;
   animation: ${shimmer} 1.5s infinite linear;
+  transition: transform 0.2s ease-in-out;
   &:hover {
     transform: scale(1.05);
   }
 
-  &:before {
-    content: "";
-    display: block;
-    padding-top: ${({ $aspectRatio }) => 100 / $aspectRatio}%;
+  @media (max-width: 768px) {
+    grid-row-end: span ${({ $aspectRatio }) => Math.round($aspectRatio * 8)};
   }
 `;
 
-// 🔹 New Component to Handle Image Loading State
 const MasonryItem = ({ photo, index }: { photo: Photo; index: number }) => {
   const [loaded, setLoaded] = useState(false);
   const navigate = useNavigate();
 
   return (
     <GridItem
-      $aspectRatio={photo.width / photo.height}
+      $aspectRatio={
+        photo.width >= photo.height ? photo.width / photo.height : photo.height / photo.width
+      }
       $avgColor={photo.avg_color}
       $dataIndex={index}
-      onClick={() => navigate(`/photo/${photo.id}`)}
+      onClick={() => navigate(`/photo/${photo.id}`, { preventScrollReset: true })}
     >
       <Image
         src={photo.src.medium}
@@ -98,12 +104,10 @@ const MasonryItem = ({ photo, index }: { photo: Photo; index: number }) => {
 };
 
 const Image = styled.img<{ $isLoaded: boolean }>`
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: opacity 0.5s ease-in-out;
   opacity: ${({ $isLoaded }) => ($isLoaded ? 1 : 0)};
   border-radius: 4px;
