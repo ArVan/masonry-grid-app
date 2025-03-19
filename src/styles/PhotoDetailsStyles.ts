@@ -1,56 +1,58 @@
 import styled from "styled-components";
 
-export const StyledPhotoDetailsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+export const DetailsContainer = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
+  text-align: center;
 `;
 
-export const StyledPhotoDetails = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 20px;
+export const BackButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #007aff;
+  margin-bottom: 20px;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
-export const StyledPhotoDetailsImage = styled.img`
+export const PhotoWrapper = styled.div<{ $aspectRatio: number; $avgColor: string | null }>`
   width: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: ${({ $avgColor }) => $avgColor || "#ddd"};
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.1) 40%
+  );
+  background-size: 200px 100%;
+`;
+
+export const LargePhoto = styled.img<{ $isLoaded: boolean }>`
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
   object-fit: cover;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  transition: opacity 0.5s ease-in-out;
+  opacity: ${({ $isLoaded }) => ($isLoaded ? 1 : 0)};
 `;
 
-export const StyledPhotoDetailsContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
+export const PhotoInfo = styled.div`
+  margin-top: 20px;
+  text-align: left;
+  line-height: 1.5;
+  font-size: 16px;
 
-export const StyledPhotoDetailsTitle = styled.h2`
-  margin: 0;
-`;
+  h2 {
+    margin-bottom: 10px;
+  }
 
-export const StyledPhotoDetailsAuthor = styled.p`
-  margin: 0;
-  font-size: 0.8rem;
-`;
-
-export const StyledPhotoDetailsDescription = styled.p`
-  margin: 0;
-  font-size: 0.9rem;
-`;
-
-export const StyledPhotoDetailsTags = styled.div`
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-`;
-
-export const StyledPhotoDetailsTag = styled.span`
-  padding: 4px 8px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  p {
+    margin: 5px 0;
+  }
 `;

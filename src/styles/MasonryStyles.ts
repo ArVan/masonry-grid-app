@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { shimmer } from "./GlobalStyles";
 
 export const GridContainer = styled.div`
   display: grid;
@@ -48,7 +47,6 @@ export const GridItem = styled.div.attrs<{
     rgba(255, 255, 255, 0.1) 40%
   );
   background-size: 200px 100%;
-  animation: ${shimmer} 1.5s infinite linear;
   transition: transform 0.2s ease-in-out;
   &:hover {
     transform: scale(1.05);

@@ -1,4 +1,4 @@
-import { createGlobalStyle, keyframes } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
   :root {
@@ -27,9 +27,4 @@ export const GlobalStyles = createGlobalStyle`
     line-height: 1.1;
     text-align: center;
   }
-`;
-
-export const shimmer = keyframes`
-  0% { background-position: -200px 0; }
-  100% { background-position: 200px 0; }
 `;
