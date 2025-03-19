@@ -21,9 +21,20 @@ export const usePhoto = (id?: string) => {
             headers: { Authorization: API_KEY },
           });
 
-          if (!response.ok) throw new Error("Failed to fetch photo details");
+          if (!response.ok) {
+            throw new Error(
+              response.status === 404
+                ? `Could not find photo with ID ${id}`
+                : `Failed to fetch photo details: ${response.status} ${response.statusText}`,
+            );
+          }
 
           const data = await response.json();
+
+          if (!data.id) {
+            throw new Error("Invalid API response");
+          }
+
           setPhoto(data);
         } catch (err) {
           setError((err as Error).message);

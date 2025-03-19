@@ -54,9 +54,16 @@ export const usePhotoStore = create<PhotoStore>()(
           },
         );
 
-        if (!response.ok) throw new Error("Failed to fetch photos");
+        if (!response.ok) {
+          throw new Error(`API Error: ${response.status} ${response.statusText}`);
+        }
 
         const data = (await response.json()) as PixelsResponse;
+
+        if (!data.photos) {
+          throw new Error("Invalid API response");
+        }
+
         const newPhotos = [...photos];
         data.photos.forEach((photo) => {
           if (!newPhotos.find((p) => p.id === photo.id)) {

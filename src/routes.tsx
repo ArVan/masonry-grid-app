@@ -2,9 +2,9 @@ import { Route, Routes } from "react-router-dom";
 import Home from "@/pages/Home";
 import { lazy, Suspense } from "react";
 import { StyledLoader, StyledLoaderContainer } from "./styles/LoaderStyles";
-import NotFoundPage from "./pages/NotFound";
 
 const PhotoDetails = lazy(() => import("@/pages/PhotoDetails"));
+const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 
 const AppRoutes = () => {
   return (

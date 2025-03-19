@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { shimmer } from "@/styles/GlobalStyles";
 import { usePhoto } from "@/hooks/usePhoto";
+import { StyledLoadingText } from "@/styles/PhotoGridStyles";
+import ErrorComponent from "@/components/ErrorComponent";
 
 const PhotoDetails = () => {
   const { id } = useParams(); // Get photo ID from URL
@@ -10,9 +12,27 @@ const PhotoDetails = () => {
   const { photo, loading, error } = usePhoto(id);
   const [loaded, setLoaded] = useState<boolean>(false);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (!photo) return <p>Photo not found.</p>;
+  if (loading) return <StyledLoadingText>Loading Photo...</StyledLoadingText>;
+
+  if (error) {
+    return (
+      <ErrorComponent
+        title="Error Loading Photo"
+        message={error}
+        buttonAction={() => navigate(-1)}
+        buttonText="Go Back"
+      />
+    );
+  }
+  if (!photo)
+    return (
+      <ErrorComponent
+        title="404"
+        message={`Photo with ID ${id} not found.`}
+        buttonAction={() => navigate(-1)}
+        buttonText="Go Back"
+      />
+    );
 
   return (
     <DetailsContainer>

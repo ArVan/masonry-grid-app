@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import MasonryGrid from "./MasonryGrid";
 import { usePhotoStore } from "@/store/usePhotoStore";
+import ErrorComponent from "./ErrorComponent";
+import { StyledLoadingText } from "@/styles/PhotoGridStyles";
 
 let ignoreOnDoubleMount = false;
 
@@ -41,12 +43,20 @@ const PhotoGrid = () => {
     return () => {};
   }, [allVisible, hasNext]);
 
-  if (error) return <p>Error: {error}</p>;
-
   return (
     <>
       <MasonryGrid photos={photos} onEndReached={() => setAllVisible(true)} />
-      {hasNext && allVisible && <>{loading && <p>Loading more images...</p>}</>}
+      {!error && hasNext && allVisible && (
+        <>{loading && <StyledLoadingText>Loading more images...</StyledLoadingText>}</>
+      )}
+      {error && (
+        <ErrorComponent
+          title="Error Loading Photos"
+          message={error}
+          buttonAction={fetchPhotos}
+          variant="small"
+        />
+      )}
     </>
   );
 };

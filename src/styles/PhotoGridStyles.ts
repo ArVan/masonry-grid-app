@@ -43,8 +43,9 @@ export const StyledPhotoDetailsButton = styled.button`
   cursor: pointer;
 `;
 
-export const StyledPhotoDetailsButtonIcon = styled.span`
-  margin-right: 8px;
+export const StyledLoadingText = styled.p`
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin-top: 20px;
 `;
-
-export const StyledPhotoDetailsButtonLabel = styled.span``;
