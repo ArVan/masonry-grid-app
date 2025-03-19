@@ -9,9 +9,11 @@ interface PhotoStore {
   error: string | null;
   page: number;
   hasNext: boolean;
-  fetchPhotos: () => Promise<void>;
+  fetchPhotos: (query?: string, isClean?: boolean) => Promise<void>;
   scrollPosition: number; // Stores scroll position
   setScrollPosition: (position: number) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 }
 
 const API_KEY = import.meta.env.VITE_PEXELS_API_KEY;
@@ -25,24 +27,25 @@ function stringifyParams<T extends Params>(params: T) {
 export const usePhotoStore = create<PhotoStore>()(
   devtools((set, get) => ({
     photos: [],
-    photosById: {},
     loading: false,
     error: null,
     page: 1,
     hasNext: true,
     scrollPosition: 0,
-
     setScrollPosition: (position) =>
       set({ scrollPosition: position }, undefined, "photoStore/setScrollPosition"),
 
-    fetchPhotos: async (query?: string) => {
+    searchQuery: "",
+    setSearchQuery: (query) => set({ searchQuery: query }, undefined, "photoStore/setSearchQuery"),
+
+    fetchPhotos: async (query, isClean) => {
       const { page, photos } = get();
       set({ loading: true }, undefined, "photoStore/setLoading");
 
       try {
         const params = {
           per_page: "" + PER_PAGE,
-          page: "" + page,
+          page: "" + (isClean ? 1 : page),
         } as PhotoSearchRequestParams;
 
         if (query) params.query = query;
@@ -64,7 +67,7 @@ export const usePhotoStore = create<PhotoStore>()(
           throw new Error("Invalid API response");
         }
 
-        const newPhotos = [...photos];
+        const newPhotos = isClean ? [] : [...photos];
         data.photos.forEach((photo) => {
           if (!newPhotos.find((p) => p.id === photo.id)) {
             newPhotos.push(photo);
@@ -74,7 +77,7 @@ export const usePhotoStore = create<PhotoStore>()(
         set(
           {
             photos: newPhotos,
-            page: page + 1, // Increment page,
+            page: isClean ? 2 : page + 1, // Increment page,
             hasNext: !!data.next_page,
           },
           undefined,

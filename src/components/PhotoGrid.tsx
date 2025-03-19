@@ -2,18 +2,24 @@ import { useEffect, useRef, useState } from "react";
 import MasonryGrid from "./MasonryGrid";
 import { usePhotoStore } from "@/store/usePhotoStore";
 import ErrorComponent from "./ErrorComponent";
-import { StyledLoadingText } from "@/styles/PhotoGridStyles";
+import { Container, StyledLoadingText } from "@/styles/PhotoGridStyles";
+import SearchInput from "./SearchInput";
 
 let ignoreOnDoubleMount = false;
 
 const PhotoGrid = () => {
-  const { photos, loading, error, hasNext, fetchPhotos, scrollPosition } = usePhotoStore();
+  const { photos, loading, error, hasNext, fetchPhotos, scrollPosition, searchQuery } =
+    usePhotoStore();
   const [allVisible, setAllVisible] = useState(false);
   const scrollTimeout = useRef<number | null>(null);
 
-  const onLoadMorePhotos = (ignore?: boolean) => {
+  /**
+   * This function is called when the component mounts and when the user scrolls to the bottom of the page.
+   * @param ignore - Ignore fetching photos to handle double-mount in development
+   */
+  const onLoad = (ignore?: boolean) => {
     if (!ignore) {
-      fetchPhotos();
+      fetchPhotos(searchQuery);
     }
   };
 
@@ -27,7 +33,7 @@ const PhotoGrid = () => {
   }, [scrollPosition]);
 
   useEffect(() => {
-    onLoadMorePhotos(ignoreOnDoubleMount);
+    onLoad(ignoreOnDoubleMount);
     ignoreOnDoubleMount = false;
     return () => {
       ignoreOnDoubleMount = true;
@@ -36,7 +42,7 @@ const PhotoGrid = () => {
 
   useEffect(() => {
     if (allVisible && hasNext) {
-      fetchPhotos().then(() => {
+      fetchPhotos(searchQuery).then(() => {
         setAllVisible(false);
       });
     }
@@ -44,7 +50,8 @@ const PhotoGrid = () => {
   }, [allVisible, hasNext]);
 
   return (
-    <>
+    <Container>
+      <SearchInput />
       <MasonryGrid photos={photos} onEndReached={() => setAllVisible(true)} />
       {!error && hasNext && allVisible && (
         <>{loading && <StyledLoadingText>Loading more images...</StyledLoadingText>}</>
@@ -53,11 +60,11 @@ const PhotoGrid = () => {
         <ErrorComponent
           title="Error Loading Photos"
           message={error}
-          buttonAction={fetchPhotos}
+          buttonAction={() => fetchPhotos(searchQuery)}
           variant="small"
         />
       )}
-    </>
+    </Container>
   );
 };
 

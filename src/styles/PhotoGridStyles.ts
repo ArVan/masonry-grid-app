@@ -49,3 +49,10 @@ export const StyledLoadingText = styled.p`
   color: #555;
   margin-top: 20px;
 `;
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
