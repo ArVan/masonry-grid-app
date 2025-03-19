@@ -1,3 +1,4 @@
+import { usePhotoStore } from "@/store/usePhotoStore";
 import { GridItem, Image } from "@/styles/MasonryStyles";
 import { Photo } from "@/types/photos";
 import { useState } from "react";
@@ -14,6 +15,12 @@ export const MasonryItem = ({
 }) => {
   const [loaded, setLoaded] = useState(false);
   const navigate = useNavigate();
+  const { setScrollPosition } = usePhotoStore();
+
+  const handleClick = () => {
+    setScrollPosition(window.scrollY); // Save scroll position before navigating
+    navigate(`/photo/${photo.id}`);
+  };
 
   return (
     <GridItem
@@ -21,7 +28,7 @@ export const MasonryItem = ({
       $avgColor={photo.avg_color}
       $dataIndex={index}
       $isVisible={isVisible}
-      onClick={() => navigate(`/photo/${photo.id}`, { preventScrollReset: true })}
+      onClick={handleClick}
     >
       {isVisible ? (
         <Image

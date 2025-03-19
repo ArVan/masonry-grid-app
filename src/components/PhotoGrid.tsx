@@ -1,18 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MasonryGrid from "./MasonryGrid";
 import { usePhotoStore } from "@/store/usePhotoStore";
 
 let ignoreOnDoubleMount = false;
 
 const PhotoGrid = () => {
-  const { photos, loading, error, hasNext, fetchPhotos } = usePhotoStore();
+  const { photos, loading, error, hasNext, fetchPhotos, scrollPosition } = usePhotoStore();
   const [allVisible, setAllVisible] = useState(false);
+  const scrollTimeout = useRef<number | null>(null);
 
   const onLoadMorePhotos = (ignore?: boolean) => {
     if (!ignore) {
       fetchPhotos();
     }
   };
+
+  // Restore scroll position on mount
+  useEffect(() => {
+    if (scrollPosition > 0 && !scrollTimeout.current) {
+      scrollTimeout.current = window.setTimeout(() => {
+        window.scrollTo({ top: scrollPosition, behavior: "instant" });
+      }, 500); // Delay to ensure React has committed updates
+    }
+  }, [scrollPosition]);
 
   useEffect(() => {
     onLoadMorePhotos(ignoreOnDoubleMount);

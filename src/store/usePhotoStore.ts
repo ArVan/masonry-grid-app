@@ -10,6 +10,8 @@ interface PhotoStore {
   page: number;
   hasNext: boolean;
   fetchPhotos: () => Promise<void>;
+  scrollPosition: number; // Stores scroll position
+  setScrollPosition: (position: number) => void;
 }
 
 const API_KEY = import.meta.env.VITE_PEXELS_API_KEY;
@@ -28,6 +30,10 @@ export const usePhotoStore = create<PhotoStore>()(
     error: null,
     page: 1,
     hasNext: true,
+    scrollPosition: 0,
+
+    setScrollPosition: (position) =>
+      set({ scrollPosition: position }, undefined, "photoStore/setScrollPosition"),
 
     fetchPhotos: async (query?: string) => {
       const { page, photos } = get();
