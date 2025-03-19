@@ -1,10 +1,9 @@
 import { create } from "zustand";
 import { photoBaseUrl, PER_PAGE } from "@/constants";
-import { PhotoWithIndex, PixelsResponse, Params, PhotoSearchRequestParams } from "@/types/photos";
+import { PixelsResponse, Params, PhotoSearchRequestParams, Photo } from "@/types/photos";
 
 interface PhotoStore {
-  photos: number[];
-  photosById: { [key: string]: PhotoWithIndex };
+  photos: Photo[];
   loading: boolean;
   error: string | null;
   page: number;
@@ -29,7 +28,7 @@ export const usePhotoStore = create<PhotoStore>((set, get) => ({
   hasNext: true,
 
   fetchPhotos: async (query?: string) => {
-    const { page, photos, photosById } = get();
+    const { page, photos } = get();
     set({ loading: true });
 
     try {
@@ -50,20 +49,15 @@ export const usePhotoStore = create<PhotoStore>((set, get) => ({
       if (!response.ok) throw new Error("Failed to fetch photos");
 
       const data = (await response.json()) as PixelsResponse;
-      const newIds = data.photos.map((photo) => photo.id);
+      const newPhotos = [...photos];
+      data.photos.forEach((photo) => {
+        if (!newPhotos.find((p) => p.id === photo.id)) {
+          newPhotos.push(photo);
+        }
+      });
 
       set({
-        photos: [...new Set([...photos, ...newIds])], // Append new photo ids ensuring it is unique
-        photosById: {
-          ...photosById,
-          ...data.photos.reduce(
-            (acc, photo, index) => {
-              acc[photo.id] = { ...photo, index: photos.length + index };
-              return acc;
-            },
-            {} as { [key: string]: PhotoWithIndex },
-          ),
-        },
+        photos: newPhotos,
         page: page + 1, // Increment page,
         hasNext: !!data.next_page,
       });

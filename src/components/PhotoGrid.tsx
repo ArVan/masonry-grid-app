@@ -5,7 +5,7 @@ import { usePhotoStore } from "@/store/usePhotoStore";
 let ignoreOnDoubleMount = false;
 
 const PhotoGrid = () => {
-  const { photos, photosById, loading, error, hasNext, fetchPhotos } = usePhotoStore();
+  const { photos, loading, error, hasNext, fetchPhotos } = usePhotoStore();
   const [allVisible, setAllVisible] = useState(false);
 
   const onLoadMorePhotos = (ignore?: boolean) => {
@@ -35,7 +35,7 @@ const PhotoGrid = () => {
 
   return (
     <>
-      <MasonryGrid photoIds={photos} photos={photosById} onEndReached={() => setAllVisible(true)} />
+      <MasonryGrid photos={photos} onEndReached={() => setAllVisible(true)} />
       {hasNext && allVisible && <>{loading && <p>Loading more images...</p>}</>}
     </>
   );

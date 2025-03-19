@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 const API_KEY = import.meta.env.VITE_PEXELS_API_KEY;
 
 export const usePhoto = (id?: string) => {
-  const { photosById } = usePhotoStore();
+  const { photos } = usePhotoStore();
   const [photo, setPhoto] = useState<Photo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const photo = id && photosById[parseInt(id)];
+    const photo = id && photos.find((photo) => photo.id === parseInt(id));
     if (!photo) {
       const fetchPhotoDetails = async () => {
         setLoading(true);
@@ -38,7 +38,7 @@ export const usePhoto = (id?: string) => {
     }
 
     return () => {};
-  }, [id, photosById]);
+  }, [id, photos]);
 
   return { photo, loading, error };
 };

@@ -1,22 +1,20 @@
-import { PhotoWithIndex } from "@/types/photos";
+import { Photo } from "@/types/photos";
 import { MasonryItem } from "./MasonryItem";
 import { GridContainer } from "@/styles/MasonryStyles";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface MasonryGridProps {
-  photos: { [key: string]: PhotoWithIndex };
-  photoIds: number[];
+  photos: Photo[];
   onEndReached: () => void;
 }
 
 const BUFFER_ITEMS = 2; // Extra images to render beyond viewport
 
-const MasonryGrid = ({ photos, photoIds, onEndReached }: MasonryGridProps) => {
+const MasonryGrid = ({ photos, onEndReached }: MasonryGridProps) => {
   const gridRef = useRef<HTMLDivElement | null>(null);
   const [columns, setColumns] = useState(3); // Default column count
   const [columnWidth, setColumnWidth] = useState(200); // Default width
   const [visiblePhotos, setVisiblePhotos] = useState<number[]>([]);
-  const [itemPositions, setItemPositions] = useState<{ startY: number; height: number }[]>([]);
   const [lastVisibleIndex, setLastVisibleIndex] = useState(0);
 
   const scrollTimeout = useRef<number | null>(null);
@@ -42,26 +40,25 @@ const MasonryGrid = ({ photos, photoIds, onEndReached }: MasonryGridProps) => {
     return () => window.removeEventListener("resize", updateGridSettings);
   }, []);
 
-  // Calculate row positions for each image
-  useEffect(() => {
-    if (!gridRef.current) return;
-
+  const photoPositionsById = useMemo(() => {
     const accumulatedHeights: number[] = []; // Track height per column
     for (let i = 0; i < columns; i++) accumulatedHeights.push(0); // Initialize column heights
-
     const gap = 16; // Grid gap in pixels
-    const positions = photoIds.map((photo, index) => {
-      const columnIndex = index % columns; // Determine which column this image goes into
-      const rowHeight = Math.round((photos[photo].height / photos[photo].width) * columnWidth); // Adjust height based on aspect ratio
 
-      const startY = accumulatedHeights[columnIndex]; // Get the current column height
-      accumulatedHeights[columnIndex] += rowHeight + gap; // Update column height with image height + gap
+    return photos.reduce(
+      (acc, photo, index) => {
+        const columnIndex = index % columns; // Determine which column this image goes into
+        const rowHeight = Math.round((photo.height / photo.width) * columnWidth); // Adjust height based on aspect ratio
 
-      return { startY, height: rowHeight };
-    });
+        const startY = accumulatedHeights[columnIndex]; // Get the current column height
+        accumulatedHeights[columnIndex] += rowHeight + gap; // Update column height with image height + gap
 
-    setItemPositions(positions);
-  }, [photoIds, photos, columns, columnWidth]);
+        acc[photo.id] = { startY, height: rowHeight };
+        return acc;
+      },
+      {} as Record<number, { startY: number; height: number }>,
+    );
+  }, [photos, columnWidth, columns]);
 
   // Handle scroll event to determine visible rows
   useEffect(() => {
@@ -75,7 +72,10 @@ const MasonryGrid = ({ photos, photoIds, onEndReached }: MasonryGridProps) => {
 
         const { scrollTop, clientHeight } = document.documentElement;
 
-        let newStartIdx = itemPositions.findIndex((pos) => pos.startY + pos.height >= scrollTop);
+        let newStartIdx = photos.findIndex(
+          (photo) =>
+            photoPositionsById[photo.id].startY + photoPositionsById[photo.id].height >= scrollTop,
+        );
 
         if (newStartIdx === -1) {
           newStartIdx = 0; // If no item found (rare case), fallback to first image
@@ -84,13 +84,17 @@ const MasonryGrid = ({ photos, photoIds, onEndReached }: MasonryGridProps) => {
         // Ensure `startIdx` remains within bounds and includes a buffer
         const startIdx = Math.max(0, newStartIdx - BUFFER_ITEMS);
 
-        let newEndIdx = itemPositions.findIndex((pos) => pos.startY >= scrollTop + clientHeight);
+        let newEndIdx = photos.findIndex(
+          (photo) => photoPositionsById[photo.id].startY >= scrollTop + clientHeight,
+        );
 
         if (newEndIdx === -1) {
-          newEndIdx = itemPositions.length - 1; // If no item found, use the last available index
+          newEndIdx = photos.length - 1; // If no item found, use the last available index
         } else {
-          const lastRowStartY = itemPositions[newEndIdx].startY;
-          const remainingItems = itemPositions.filter((pos) => pos.startY === lastRowStartY).length;
+          const lastRowStartY = photoPositionsById[photos[newEndIdx].id].startY;
+          const remainingItems = photos.filter(
+            (photo) => photoPositionsById[photo.id].startY === lastRowStartY,
+          ).length;
 
           if (remainingItems < columns) {
             newEndIdx += columns - remainingItems; // Expand to fill the row
@@ -98,11 +102,13 @@ const MasonryGrid = ({ photos, photoIds, onEndReached }: MasonryGridProps) => {
         }
 
         // Apply buffer to avoid cutting off scrolling experience
-        const endIdx = Math.min(newEndIdx + BUFFER_ITEMS, itemPositions.length - 1);
+        const endIdx = Math.min(newEndIdx + BUFFER_ITEMS, photos.length - 1);
 
         // Ensure at least BUFFER_ITEMS are included
         setVisiblePhotos(
-          photoIds.slice(Math.max(0, startIdx - BUFFER_ITEMS), endIdx + BUFFER_ITEMS),
+          photos
+            .slice(Math.max(0, startIdx - BUFFER_ITEMS), endIdx + BUFFER_ITEMS)
+            .map((item) => item.id),
         );
         setLastVisibleIndex(endIdx + BUFFER_ITEMS);
       }, 50); // Debounce time (50ms)
@@ -115,26 +121,21 @@ const MasonryGrid = ({ photos, photoIds, onEndReached }: MasonryGridProps) => {
       window.removeEventListener("scroll", handleScroll);
       if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     };
-  }, [photoIds, itemPositions]);
+  }, [photos, photoPositionsById]);
 
   useEffect(() => {
-    if (photoIds.length && lastVisibleIndex >= photoIds.length) {
+    if (photos.length && lastVisibleIndex >= photos.length) {
       onEndReached();
     }
   }, [lastVisibleIndex]);
 
   return (
     <GridContainer ref={gridRef}>
-      {photoIds.map((photoId, index) => {
-        const isVisible = visiblePhotos.includes(photoId);
+      {photos.map((photo, index) => {
+        const isVisible = visiblePhotos.includes(photo.id);
 
         return index < lastVisibleIndex ? (
-          <MasonryItem
-            key={photoId}
-            photo={photos[photoId]}
-            index={photos[photoId].index}
-            isVisible={isVisible}
-          />
+          <MasonryItem key={photo.id} photo={photo} index={index} isVisible={isVisible} />
         ) : null;
       })}
     </GridContainer>
