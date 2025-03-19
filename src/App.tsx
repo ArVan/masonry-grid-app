@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <GlobalStyles />
-      <BrowserRouter>
+      <BrowserRouter basename="/masonry-grid-app">
         <AppRoutes />
       </BrowserRouter>
     </>
