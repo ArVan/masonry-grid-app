@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "@/pages/Home";
 import { lazy, Suspense } from "react";
 import { StyledLoader, StyledLoaderContainer } from "./styles/LoaderStyles";
 
+const Home = lazy(() => import("@/pages/Home"));
 const PhotoDetails = lazy(() => import("@/pages/PhotoDetails"));
 const NotFoundPage = lazy(() => import("@/pages/NotFound"));
 
