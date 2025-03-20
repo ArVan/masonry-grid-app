@@ -14,4 +14,25 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    sourcemap: false,
+    minify: "esbuild",
+    target: "esnext",
+    rollupOptions: {
+      treeshake: true,
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("react-router-dom")) return "react-router";
+            if (id.includes("zustand")) return "zustand";
+            if (id.includes("styled-components")) return "styled-components";
+            return "vendor";
+          }
+        },
+      },
+    },
+  },
+  define: {
+    "process.env.NODE_ENV": JSON.stringify("production"), // Optimizes styled-components for production
+  },
 });
