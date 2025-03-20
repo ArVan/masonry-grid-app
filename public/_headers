@@ -1,0 +1,11 @@
+/assets/react-router.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/zustand.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/styled-components.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/vendor.js
+  Cache-Control: public, max-age=31536000, immutable

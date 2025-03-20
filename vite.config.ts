@@ -29,6 +29,17 @@ export default defineConfig({
             return "vendor";
           }
         },
+        entryFileNames: ({ name }) => {
+          // Keep fixed names for manually defined chunks
+          const fixedChunks = ["react-router", "zustand", "styled-components", "vendor"];
+          return fixedChunks.includes(name) ? `assets/${name}.js` : `assets/[name].[hash].js`;
+        },
+        chunkFileNames: ({ name }) => {
+          // Ensures manually defined chunk names remain fixed
+          const fixedChunks = ["react-router", "zustand", "styled-components", "vendor"];
+          return fixedChunks.includes(name) ? `assets/${name}.js` : `assets/[name].[hash].js`;
+        },
+        assetFileNames: "assets/[name].[hash].[ext]", // Keeps hashing for images, fonts, and other assets
       },
     },
   },
