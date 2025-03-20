@@ -40,13 +40,6 @@ export const StyledGridItem = styled.div.attrs<{
   position: relative;
   cursor: pointer;
   border-radius: 4px;
-  background-image: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.1) 40%
-  );
-  background-size: 200px 100%;
   transition: transform 0.2s ease-in-out;
   &:hover {
     transform: scale(1.05);

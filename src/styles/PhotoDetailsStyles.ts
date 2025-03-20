@@ -24,13 +24,6 @@ export const StyledPhotoWrapper = styled.div<{ $aspectRatio: number; $avgColor: 
   overflow: hidden;
   border-radius: 10px;
   background-color: ${({ $avgColor }) => $avgColor || "#ddd"};
-  background-image: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.1) 40%
-  );
-  background-size: 200px 100%;
 `;
 
 export const StyledLargePhoto = styled.img<{ $isLoaded: boolean }>`
