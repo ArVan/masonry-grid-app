@@ -50,7 +50,7 @@ export const StyledLoadingText = styled.p`
   margin-top: 20px;
 `;
 
-export const Container = styled.div`
+export const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

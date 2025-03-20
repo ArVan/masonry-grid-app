@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const GridContainer = styled.div`
+export const StyledGridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive column layout */
   grid-auto-rows: 10px; /* Defines row height unit */
@@ -16,7 +16,7 @@ export const GridContainer = styled.div`
   }
 `;
 
-export const GridItem = styled.div.attrs<{
+export const StyledGridItem = styled.div.attrs<{
   $aspectRatio: number;
   $avgColor: string | null;
   $dataIndex: number;
@@ -57,7 +57,7 @@ export const GridItem = styled.div.attrs<{
   }
 `;
 
-export const Image = styled.img<{ $isLoaded: boolean }>`
+export const StyledImage = styled.img<{ $isLoaded: boolean }>`
   width: 100%;
   height: 100%;
   object-fit: cover;

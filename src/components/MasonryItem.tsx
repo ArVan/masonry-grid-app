@@ -1,19 +1,17 @@
 import { usePhotoStore } from "@/store/usePhotoStore";
-import { GridItem, Image } from "@/styles/MasonryStyles";
+import { StyledGridItem, StyledImage } from "@/styles/MasonryStyles";
 import { Photo } from "@/types/photos";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const MasonryItem = ({
-  photo,
-  index,
-  isVisible,
-}: {
+type Props = {
   photo: Photo;
   index: number;
   isVisible: boolean;
-}) => {
-  const [loaded, setLoaded] = useState(false);
+};
+
+export const MasonryItem = ({ photo, index, isVisible }: Props) => {
+  const [loaded, setLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
   const { setScrollPosition } = usePhotoStore();
 
@@ -23,7 +21,7 @@ export const MasonryItem = ({
   };
 
   return (
-    <GridItem
+    <StyledGridItem
       $aspectRatio={photo.height / photo.width}
       $avgColor={photo.avg_color}
       $dataIndex={index}
@@ -31,7 +29,7 @@ export const MasonryItem = ({
       onClick={handleClick}
     >
       {isVisible ? (
-        <Image
+        <StyledImage
           src={photo.src.medium}
           alt={photo.alt}
           onLoad={() => setLoaded(true)}
@@ -39,6 +37,6 @@ export const MasonryItem = ({
           loading={isVisible ? "eager" : "lazy"}
         />
       ) : null}
-    </GridItem>
+    </StyledGridItem>
   );
 };

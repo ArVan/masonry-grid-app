@@ -3,7 +3,7 @@ import { devtools } from "zustand/middleware";
 import { photoBaseUrl, PER_PAGE } from "@/constants";
 import { PixelsResponse, Params, PhotoSearchRequestParams, Photo } from "@/types/photos";
 
-interface PhotoStore {
+interface PhotosStore {
   photos: Photo[];
   loading: boolean;
   error: string | null;
@@ -24,7 +24,7 @@ function stringifyParams<T extends Params>(params: T) {
     .join("&");
 }
 
-export const usePhotoStore = create<PhotoStore>()(
+export const usePhotoStore = create<PhotosStore>()(
   devtools((set, get) => ({
     photos: [],
     loading: false,
@@ -36,11 +36,15 @@ export const usePhotoStore = create<PhotoStore>()(
       set({ scrollPosition: position }, undefined, "photoStore/setScrollPosition"),
 
     searchQuery: "",
-    setSearchQuery: (query) => set({ searchQuery: query }, undefined, "photoStore/setSearchQuery"),
+    setSearchQuery: (query) => {
+      if (query !== get().searchQuery) {
+        set({ searchQuery: query }, undefined, "photoStore/setSearchQuery");
+      }
+    },
 
     fetchPhotos: async (query, isClean) => {
       const { page, photos } = get();
-      set({ loading: true }, undefined, "photoStore/setLoading");
+      set({ loading: true, error: null }, undefined, "photoStore/setLoading");
 
       try {
         const params = {
@@ -69,6 +73,7 @@ export const usePhotoStore = create<PhotoStore>()(
 
         const newPhotos = isClean ? [] : [...photos];
         data.photos.forEach((photo) => {
+          // API returns duplicate photos in different pages, so we need to filter them out
           if (!newPhotos.find((p) => p.id === photo.id)) {
             newPhotos.push(photo);
           }

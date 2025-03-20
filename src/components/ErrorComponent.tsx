@@ -1,4 +1,9 @@
-import { ErrorContainer, ErrorMessage, ErrorTitle, RetryButton } from "@/styles/ErrorStyles";
+import {
+  StyledErrorContainer,
+  StyledErrorMessage,
+  StyledErrorTitle,
+  RetryButton,
+} from "@/styles/ErrorStyles";
 
 interface ErrorProps {
   variant?: "small" | "large";
@@ -8,19 +13,19 @@ interface ErrorProps {
   buttonAction?: () => void;
 }
 
-const ErrorComponent: React.FC<ErrorProps> = ({
+const ErrorComponent = ({
   variant = "large",
   title = "Oops! Something went wrong.",
   message = "An unexpected error occurred. Please try again later.",
   buttonText = "Retry",
   buttonAction,
-}) => {
+}: ErrorProps) => {
   return (
-    <ErrorContainer $variant={variant}>
-      <ErrorTitle>{title}</ErrorTitle>
-      <ErrorMessage>{message}</ErrorMessage>
+    <StyledErrorContainer $variant={variant}>
+      <StyledErrorTitle>{title}</StyledErrorTitle>
+      <StyledErrorMessage>{message}</StyledErrorMessage>
       {buttonAction && <RetryButton onClick={buttonAction}>{buttonText}</RetryButton>}
-    </ErrorContainer>
+    </StyledErrorContainer>
   );
 };
 

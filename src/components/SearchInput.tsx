@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { usePhotoStore } from "@/store/usePhotoStore";
-import { SearchBox, SearchContainer } from "@/styles/SearchStyles";
+import { StyledSearchBox, StyledSearchContainer } from "@/styles/SearchStyles";
 
 const SearchInput = () => {
   const { fetchPhotos, setSearchQuery } = usePhotoStore();
@@ -15,15 +15,19 @@ const SearchInput = () => {
     return () => clearTimeout(debounce); // Clear timeout if user keeps typing
   }, [query]);
 
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setQuery(event.target.value);
+  }
+
   return (
-    <SearchContainer>
-      <SearchBox
+    <StyledSearchContainer>
+      <StyledSearchBox
         type="text"
         placeholder="Search images..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={handleChange}
       />
-    </SearchContainer>
+    </StyledSearchContainer>
   );
 };
 

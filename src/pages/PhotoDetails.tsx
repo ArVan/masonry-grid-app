@@ -4,15 +4,15 @@ import { usePhoto } from "@/hooks/usePhoto";
 import { StyledLoadingText } from "@/styles/PhotoGridStyles";
 import ErrorComponent from "@/components/ErrorComponent";
 import {
-  BackButton,
-  DetailsContainer,
-  LargePhoto,
-  PhotoInfo,
-  PhotoWrapper,
+  StyledBackButton,
+  StyledDetailsContainer,
+  StyledLargePhoto,
+  StyledPhotoInfo,
+  StyledPhotoWrapper,
 } from "@/styles/PhotoDetailsStyles";
 
 const PhotoDetails = () => {
-  const { id } = useParams(); // Get photo ID from URL
+  const { id } = useParams<{ id: string }>(); // Get photo ID from URL
   const navigate = useNavigate();
   const { photo, loading, error } = usePhoto(id);
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -40,19 +40,19 @@ const PhotoDetails = () => {
     );
 
   return (
-    <DetailsContainer>
-      <BackButton onClick={() => navigate(-1)}>← Back</BackButton>
+    <StyledDetailsContainer>
+      <StyledBackButton onClick={() => navigate(-1)}>← Back</StyledBackButton>
 
-      <PhotoWrapper $aspectRatio={photo.height / photo.width} $avgColor={photo.avg_color}>
-        <LargePhoto
+      <StyledPhotoWrapper $aspectRatio={photo.height / photo.width} $avgColor={photo.avg_color}>
+        <StyledLargePhoto
           src={photo.src.original}
           alt={photo.alt}
           onLoad={() => setLoaded(true)}
           $isLoaded={loaded}
         />
-      </PhotoWrapper>
+      </StyledPhotoWrapper>
 
-      <PhotoInfo>
+      <StyledPhotoInfo>
         <h2>
           Photographer:{" "}
           <a href={photo.photographer_url} target="_blank">
@@ -65,8 +65,8 @@ const PhotoDetails = () => {
         <p>
           <strong>Description:</strong> {photo.alt || "No description available"}
         </p>
-      </PhotoInfo>
-    </DetailsContainer>
+      </StyledPhotoInfo>
+    </StyledDetailsContainer>
   );
 };
 

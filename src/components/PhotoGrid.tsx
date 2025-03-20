@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import MasonryGrid from "./MasonryGrid";
 import { usePhotoStore } from "@/store/usePhotoStore";
 import ErrorComponent from "./ErrorComponent";
-import { Container, StyledLoadingText } from "@/styles/PhotoGridStyles";
+import { StyledContainer, StyledLoadingText } from "@/styles/PhotoGridStyles";
 import SearchInput from "./SearchInput";
 
 let ignoreOnDoubleMount = false;
@@ -50,7 +50,7 @@ const PhotoGrid = () => {
   }, [allVisible, hasNext]);
 
   return (
-    <Container>
+    <StyledContainer>
       <SearchInput />
       <MasonryGrid photos={photos} onEndReached={() => setAllVisible(true)} />
       {!error && hasNext && allVisible && (
@@ -64,7 +64,7 @@ const PhotoGrid = () => {
           variant="small"
         />
       )}
-    </Container>
+    </StyledContainer>
   );
 };
 

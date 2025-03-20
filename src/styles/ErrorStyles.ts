@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ErrorContainer = styled.div<{ $variant: "small" | "large" }>`
+export const StyledErrorContainer = styled.div<{ $variant: "small" | "large" }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,13 +27,13 @@ export const ErrorContainer = styled.div<{ $variant: "small" | "large" }>`
   }
 `;
 
-export const ErrorTitle = styled.h2`
+export const StyledErrorTitle = styled.h2`
   font-size: 2rem;
   font-weight: bold;
   color: #d63031;
 `;
 
-export const ErrorMessage = styled.p`
+export const StyledErrorMessage = styled.p`
   font-size: 1.2rem;
   color: #555;
   max-width: 500px;

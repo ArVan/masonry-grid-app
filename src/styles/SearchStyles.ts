@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-export const SearchContainer = styled.div`
+export const StyledSearchContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 20px 0;
 `;
 
-export const SearchBox = styled.input`
+export const StyledSearchBox = styled.input`
   width: 300px;
   padding: 10px;
   font-size: 1rem;

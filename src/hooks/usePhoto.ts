@@ -5,7 +5,13 @@ import { useEffect, useState } from "react";
 
 const API_KEY = import.meta.env.VITE_PEXELS_API_KEY;
 
-export const usePhoto = (id?: string) => {
+interface PhotoStore {
+  photo: Photo | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export const usePhoto = (id?: string): PhotoStore => {
   const { photos } = usePhotoStore();
   const [photo, setPhoto] = useState<Photo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);

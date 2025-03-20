@@ -1,6 +1,6 @@
 import { Photo } from "@/types/photos";
 import { MasonryItem } from "./MasonryItem";
-import { GridContainer } from "@/styles/MasonryStyles";
+import { StyledGridContainer } from "@/styles/MasonryStyles";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 interface MasonryGridProps {
@@ -130,7 +130,7 @@ const MasonryGrid = ({ photos, onEndReached }: MasonryGridProps) => {
   }, [lastVisibleIndex]);
 
   return (
-    <GridContainer ref={gridRef}>
+    <StyledGridContainer ref={gridRef}>
       {photos.map((photo, index) => {
         const isVisible = visiblePhotos.includes(photo.id);
 
@@ -138,7 +138,7 @@ const MasonryGrid = ({ photos, onEndReached }: MasonryGridProps) => {
           <MasonryItem key={photo.id} photo={photo} index={index} isVisible={isVisible} />
         ) : null;
       })}
-    </GridContainer>
+    </StyledGridContainer>
   );
 };
 

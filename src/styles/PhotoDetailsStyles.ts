@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-export const DetailsContainer = styled.div`
+export const StyledDetailsContainer = styled.div`
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   text-align: center;
 `;
 
-export const BackButton = styled.button`
+export const StyledBackButton = styled.button`
   background: none;
   border: none;
   font-size: 18px;
@@ -19,7 +19,7 @@ export const BackButton = styled.button`
   }
 `;
 
-export const PhotoWrapper = styled.div<{ $aspectRatio: number; $avgColor: string | null }>`
+export const StyledPhotoWrapper = styled.div<{ $aspectRatio: number; $avgColor: string | null }>`
   width: 100%;
   overflow: hidden;
   border-radius: 10px;
@@ -33,7 +33,7 @@ export const PhotoWrapper = styled.div<{ $aspectRatio: number; $avgColor: string
   background-size: 200px 100%;
 `;
 
-export const LargePhoto = styled.img<{ $isLoaded: boolean }>`
+export const StyledLargePhoto = styled.img<{ $isLoaded: boolean }>`
   width: 100%;
   height: auto;
   border-radius: 10px;
@@ -42,7 +42,7 @@ export const LargePhoto = styled.img<{ $isLoaded: boolean }>`
   opacity: ${({ $isLoaded }) => ($isLoaded ? 1 : 0)};
 `;
 
-export const PhotoInfo = styled.div`
+export const StyledPhotoInfo = styled.div`
   margin-top: 20px;
   text-align: left;
   line-height: 1.5;
