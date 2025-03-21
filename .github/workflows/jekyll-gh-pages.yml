@@ -45,6 +45,8 @@ jobs:
           npm run build
       - name: Copy Cache Headers
         run: cp ./public/_headers ./dist/_headers
+      - name: Copy 404.html
+        run: cp ./dist/index.html ./dist/404.html
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
