@@ -1,6 +1,15 @@
 # 📸 Masonry Grid App
 
-A high-performance **React 19** + **Vite 6** + **Zustand** application that fetches and displays images in a **virtualized masonry grid layout**. The app supports **dynamic searching**, **infinite scrolling**, and **image details view**, all optimized for performance.
+A high-performance **React 19** + **Vite 6** + **Zustand** application that fetches and displays images in a **virtualized masonry grid layout**.
+
+The app supports **dynamic searching**, **infinite scrolling**, and **image details view**, all optimized for performance.
+
+## 🌐 Live Demo
+
+You can view the deployed application here:  
+👉 **[Masonry Grid App Live Demo](https://arvan.github.io/masonry-grid-app/)**
+
+The app is hosted on **GitHub Pages** and reflects the latest production build from the `main` branch via **GitHub Actions CI/CD**.
 
 ---
 
@@ -13,9 +22,7 @@ A high-performance **React 19** + **Vite 6** + **Zustand** application that fetc
 ✅ **React Router 7** – Handles navigation efficiently.  
 ✅ **SEO Meta Tags** – Improves discoverability.  
 ✅ **Bundle Optimization** – Ensures small, fast-loading JavaScript chunks.
-
-<!-- ✅ **Unit & Integration Testing** – Uses `Vitest` and `React Testing Library`.   -->
-
+✅ **Unit** – Uses `Vitest` and `React Testing Library`.
 ✅ **GitHub Actions Deployment** – Automates testing and deployment to GitHub Pages.
 
 ---
@@ -29,7 +36,7 @@ A high-performance **React 19** + **Vite 6** + **Zustand** application that fetc
 | **Zustand**           | State management              |
 | **Styled-Components** | CSS-in-JS styling             |
 | **React Router**      | Client-side navigation        |
-| **Window Scroll**     | Virtualization & lazy loading |
+| **Window Scroll API** | Virtualization & lazy loading |
 | **Pexels API**        | Image source                  |
 
 ---
@@ -207,7 +214,7 @@ Throughout development, made several **technology choices** based on **performan
 
 ### **4. Virtualized Masonry Grid for Performance**
 
-✅ A **row-based virtualization approach** was chosen because:
+✅ A **scroll position row-based virtualization approach** was chosen because:
 
 - **Only visible images are rendered**, reducing memory consumption.
 - **Precomputed image positions** prevent layout shifts.
@@ -240,20 +247,15 @@ Throughout development, made several **technology choices** based on **performan
 
 These design choices **optimize performance, maintainability, and scalability** while ensuring a **smooth user experience**. 🚀
 
-## <!-- 🔍 **Testing Strategy**
+## 🔍 **Testing Strategy**
 
-### **1️⃣ Unit Tests (`Vitest` + `React Testing Library`)**
+### **1. Unit Tests (`Vitest` + `React Testing Library`)**
 
 - **Component rendering (SearchInput, MasonryGrid)**
 - **Zustand store API request handling**
 - **React Router navigation validation**
 
-### **2️⃣ Integration Tests**
-
-- **Testing API request failures and retries**
-- **Ensuring correct image layout rendering**
-
-### **3️⃣ GitHub Actions CI Pipeline**
+### **2. GitHub Actions CI Pipeline**
 
 - **Ensures TypeScript correctness before building**
 - **Runs unit tests before deployment**
@@ -262,7 +264,7 @@ To run tests manually:
 
 `npm test`
 
-- - - - - -->
+---
 
 ## 🌍 **Deployment**
 
