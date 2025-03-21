@@ -21,8 +21,8 @@ The app is hosted on **GitHub Pages** and reflects the latest production build f
 ✅ **Error Handling & Error Boundaries** – Ensures smooth user experience in case of failures.  
 ✅ **React Router 7** – Handles navigation efficiently.  
 ✅ **SEO Meta Tags** – Improves discoverability.  
-✅ **Bundle Optimization** – Ensures small, fast-loading JavaScript chunks.
-✅ **Unit** – Uses `Vitest` and `React Testing Library`.
+✅ **Bundle Optimization** – Ensures small, fast-loading JavaScript chunks.  
+✅ **Unit** – Uses `Vitest` and `React Testing Library`.  
 ✅ **GitHub Actions Deployment** – Automates testing and deployment to GitHub Pages.
 
 ---
